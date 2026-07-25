@@ -43,7 +43,7 @@ $surabaya = array("kota"=>"Kota Surabaya", "tinggi"=>37.5, "long"=>112.667, "lat
 $denpashar = array("kota"=>"Kota Denpashar", "tinggi"=>35, "long"=>115.15, "lat"=>-8.60, "zone"=>8 );
 $jakarta = array("kota"=>"Kota Jakarta", "tinggi"=>50, "long"=>106.85, "lat"=>-6.16666, "zone"=>7 );
 //$kota = $jakarta; // test point
-//$kota = $malang;
+$kota = $malang;
 
 
 
@@ -147,7 +147,7 @@ function waktu($jd, $kota, $c_dhuhur, $tba) {
 }
 
 
-//$test_point = waktu($jd, $kota, $c_dhuhur, $tba);
+$test_point = waktu($jd, $kota, $c_dhuhur, $tba);
 
 
 ?>
