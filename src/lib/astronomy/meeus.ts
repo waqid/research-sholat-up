@@ -47,9 +47,14 @@ export function gregorianToJD(month: number, day: number, year: number): number 
  * @param useCeil True to round up (default for prayers), false for Terbit
  */
 export function fmtTime(time: number, useCeil = true): string {
-  const jj = Math.floor(time);
+  let jj = Math.floor(time);
   const mmRaw = (time - jj) * 60;
-  const mm = useCeil ? Math.ceil(mmRaw) : Math.floor(mmRaw);
+  let mm = useCeil ? Math.ceil(mmRaw) : Math.floor(mmRaw);
+  if (mm >= 60) {
+    jj += Math.floor(mm / 60);
+    mm = mm % 60;
+  }
+  jj = (jj % 24 + 24) % 24;
   const jjStr = jj.toString().padStart(2, '0');
   const mmStr = mm.toString().padStart(2, '0');
   return `${jjStr}:${mmStr}`;

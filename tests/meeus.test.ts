@@ -20,6 +20,8 @@ describe('Jean Meeus & Pak Abdurrouf Calculation Parity', () => {
     // 4.1916 hours -> 4:12 (ceil) vs 4:11 (floor)
     expect(fmtTime(4.1916, true)).toBe("04:12");
     expect(fmtTime(5.6608, false)).toBe("05:39");
+    // Rollover test: 14 hours + 59.1 minutes -> ceil gives 60 minutes -> must wrap to 15:00
+    expect(fmtTime(14 + 59.1 / 60, true)).toBe("15:00");
   });
 
   it('calculates exact prayer times for Kota Malang test point (JD 2454995, Imam Syafii tba=1)', () => {
