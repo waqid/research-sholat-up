@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand Duotone: Teal (Structural) + Flame (Energy/Motif Spark) */
+  --color-teal: #209CAF;
+  --color-teal-dark: #177C8C;
+  --color-flame: #EB7841;
+  --color-flame-hover: #F28C59;
+
+  /* Monochrome Base & Navigation */
+  --color-ink: #18181B;
+  --color-ink-muted: #52525B;
+  --color-surface: #FFFFFF;
+  --color-surface-muted: #FAFAFA;
+  --color-surface-dark: #0F172A;
+  --color-nav: #282828;
+
+  /* Status Ramp for Monitoring */
+  --color-status-success: #10B981;
+  --color-status-warning: #F59E0B;
+  --color-status-error: #EF4444;
+
+  /* Typography */
+  --font-display: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Radius & Shadows */
+  --radius-card: 14px;
+  --radius-btn: 8px;
+}
+
+@utility glass-card {
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(32, 156, 175, 0.2);
+  border-radius: var(--radius-card);
+
+  @media (prefers-color-scheme: dark) {
+    background-color: rgba(15, 23, 42, 0.85);
+    border-color: rgba(32, 156, 175, 0.3);
+  }
+}
+
+@utility signal-flow-active {
+  border: 2px solid var(--color-flame) !important;
+  box-shadow: 0 0 20px rgba(235, 120, 65, 0.25);
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
