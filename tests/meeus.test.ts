@@ -33,4 +33,16 @@ describe('Jean Meeus & Pak Abdurrouf Calculation Parity', () => {
     expect(fmtTime(raw.maghrib, true)).toBe("17:26");
     expect(fmtTime(raw.isya, true)).toBe("18:38");
   });
+
+  it('calculates full formatted prayer schedule via getPrayerScheduleForDate (2009-06-12)', () => {
+    const schedule = getPrayerScheduleForDate(new Date(2009, 5, 12), malang, 1);
+
+    expect(schedule.jd).toBe(2454995);
+    expect(schedule.subuh).toBe("04:18");
+    expect(schedule.terbit).toBe("05:37");
+    expect(schedule.dhuhur).toBe("11:34");
+    expect(schedule.ashar).toBe("14:53");
+    expect(schedule.maghrib).toBe("17:26");
+    expect(schedule.isya).toBe("18:38");
+  });
 });
