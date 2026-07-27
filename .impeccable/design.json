@@ -1,0 +1,122 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2025-07-25T00:00:00Z",
+  "title": "Design System: Sholat UP",
+  "extensions": {
+    "colorMeta": {
+      "sky-blue": {
+        "role": "primary",
+        "displayName": "Sky Blue",
+        "canonical": "#43B3E0",
+        "tonalRamp": ["#0d3d4d", "#1a5c73", "#267a99", "#3399bf", "#43B3E0", "#70c3e6", "#9dd3ef", "#e6f4f9"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#3e3e3e",
+        "tonalRamp": ["#1a1a1a", "#2d2d2d", "#3e3e3e", "#5c5c5c", "#7a7a7a", "#999999", "#b8b8b8", "#d7d7d7"]
+      },
+      "gray": {
+        "role": "neutral",
+        "displayName": "Gray",
+        "canonical": "#666666",
+        "tonalRamp": ["#2d2d2d", "#4d4d4d", "#666666", "#808080", "#999999", "#b3b3b3", "#cccccc", "#e6e6e6"]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero headlines, prayer times"
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section titles, prayer names"
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptions, notes"
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "inset 0px 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.1)",
+        "purpose": "Default card state"
+      },
+      {
+        "name": "input",
+        "value": "inset 0px 2px 3px 1px rgba(0, 0, 0, 0.05)",
+        "purpose": "Form field depth"
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "ease-in-out",
+        "purpose": "Default transition easing"
+      },
+      {
+        "name": "duration-fast",
+        "value": "0.2s",
+        "purpose": "Hover/focus transitions"
+      }
+    ],
+    "breakpoints": [
+      { "name": "mobile", "value": "736px" },
+      { "name": "tablet", "value": "1200px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main call-to-action button - flat design with hover lift",
+      "html": "<button class=\"ds-btn-primary\">Click Me</button>",
+      "css": ".ds-btn-primary { background: #43B3E0; color: #fff; padding: 1em 2.35em; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s ease-in-out, transform 0.1s ease-in-out; } .ds-btn-primary:hover { background: #43bff0; transform: translateY(-2px); }"
+    },
+    {
+      "name": "Prayer Time Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Individual prayer time display box",
+      "html": "<div class=\"ds-prayer-card\"><h3>Subuh</h3><h1>04:30</h1></div>",
+      "css": ".ds-prayer-card { background: #fff; padding: 2em; box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.15), 0px 2px 3px 0px rgba(0, 0, 0, 0.1); text-align: center; } .ds-prayer-card h3 { color: #3e3e3e; font-size: 2em; font-weight: 700; margin-bottom: 0.5em; } .ds-prayer-card h1 { color: #43B3E0; font-size: 3.25em; font-weight: 300; }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Fixed top navigation bar",
+      "html": "<nav class=\"ds-nav\"><ul><li><a href=\"#\">Home</a></li></ul></nav>",
+      "css": ".ds-nav { background: #282828; position: fixed; top: 0; left: 0; width: 100%; z-index: 10000; } .ds-nav a { color: #fff; text-decoration: none; padding: 0.2em 1em; margin: 0.6em 0.2em; display: block; border-radius: 8px; font-weight: 600; } .ds-nav a:hover { background: #383838; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Precision Tool",
+    "overview": "A utility-first prayer time display. The interface is invisible — users come for the times, not the design. Clean, fast, no fluff. Modernized with flat design buttons and proper contrast.",
+    "keyCharacteristics": [
+      "Minimal visual noise — every element serves the prayer time display",
+      "High contrast for outdoor readability",
+      "Mobile-first responsive design",
+      "Fast page load, no JavaScript bloat"
+    ],
+    "rules": [
+      { "name": "The Flat-By-Default Rule", "body": "Buttons use flat design with hover state changes (transform: translateY)", "section": "elevation" },
+      { "name": "The Contrast Rule", "body": "Body text uses #666 for WCAG AA compliance", "section": "colors" }
+    ],
+    "dos": [
+      "Keep the interface minimal — utility first",
+      "Ensure text contrast meets WCAG AA (4.5:1 for body, 3:1 for large text)",
+      "Use the sky blue accent sparingly",
+      "Prioritize mobile responsiveness"
+    ],
+    "donts": [
+      "Add features that distract from prayer times",
+      "Use generic Bootstrap-style gradients or effects",
+      "Increase visual complexity — users want quick time lookups",
+      "Use 3D button effects",
+      "Use gray body text (#888) that fails contrast"
+    ]
+  }
+}

@@ -16,10 +16,12 @@
 	</head>
 	<body>
 
+		<a href="#main" class="skip-link">Lewati ke konten</a>
+
 		<!-- Nav -->
 			<nav id="nav">
 				<ul class="container">
-					<li><a href="#top">Depan</a></li>
+					<li><a href="#main">Depan</a></li>
 					<li><a href="#work">Sholat Hari Ini</a></li>
 					<li><a href="#portfolio">Buat Kalender Sholat</a></li>
 					<li><a href="#contact">Kontak</a></li>

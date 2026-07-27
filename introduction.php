@@ -1,9 +1,9 @@
 <!-- Home -->
-			<div class="wrapper style1 first">
+			<div class="wrapper style1 first" id="main">
 				<article class="container" id="top">
 					<div class="row">
 						<div class="4u 12u(mobile)">
-							<span class="image fit"><img src="images/logo.jpg" alt="" /></span>
+							<span class="image fit"><img src="images/logo.jpg" alt="Sholat UP Logo" /></span>
 						</div>
 						<div class="8u 12u(mobile)">
 							<header>
