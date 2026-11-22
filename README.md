@@ -3,7 +3,7 @@
 Static, client-side prayer schedule app (HTML/CSS/JS only, no backend).
 
 ## Features
-- Jean Meeus-based prayer time calculation (ported from legacy PHP logic)
+- Jean Meeus-based prayer time calculation
 - Preset Indonesian cities + GPS autodetect
 - Asar parameter: Imam Syafi'i (default) / Imam Hanafi
 - Live next-prayer countdown
