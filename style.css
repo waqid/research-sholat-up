@@ -142,6 +142,9 @@ button, select, input { font: inherit; }
 
 .site-footer { text-align: center; padding: 1.25rem 0 .5rem; margin-top: .25rem; border-top: 1px solid var(--border); }
 .footer-note { margin: 0; font-size: .8125rem; color: var(--text-muted); }
+.footer-repo { margin: .35rem 0 0; font-size: .8125rem; }
+.footer-repo a { color: var(--accent); text-decoration: none; font-weight: 600; }
+.footer-repo a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .controls { padding: 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
 .controls-left, .controls-right { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
