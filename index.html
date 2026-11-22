@@ -1,14 +1,112 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sholat UP - Jadwal Sholat Presisi</title>
-    <link rel="icon" type="image/png" href="/icon.png" />
-    <meta name="theme-color" content="#282828" />
-  </head>
-  <body class="bg-[#F4F4F4] dark:bg-[#0F172A] text-[#18181B] dark:text-[#F8FAFC] antialiased min-h-screen">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#282828">
+  <title>Sholat UP - Jadwal Sholat Presisi</title>
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand-wrap">
+        <div class="brand"><span class="brand-dot"></span>Sholat UP</div>
+        <button id="settingsBtn" class="location-badge" type="button" aria-label="Buka pengaturan">
+          <span id="badgeLocation">Kota Malang</span>
+          <span class="badge-sep">|</span>
+          <span id="badgeTba" class="badge-teal">Asar: Syafi'i</span>
+        </button>
+      </div>
+      <nav class="tabs" aria-label="Navigasi">
+        <button class="tab active" data-tab="today" type="button">Hari Ini</button>
+        <button class="tab" data-tab="calendar" type="button">Kalender</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main">
+    <div id="statusRamp" class="status-ramp hidden" role="status"></div>
+
+    <section id="todayView" class="view">
+      <div class="hero glass">
+        <p class="hero-label">Menuju <span id="nextLabel">-</span> (<span id="nextTime">--:--</span>)</p>
+        <div id="countdown" class="countdown">00:00:00</div>
+        <p class="hero-note">Sistem komputasi presisi Jean Meeus &middot; Tanpa dependensi server</p>
+      </div>
+
+      <div class="prayer-grid" id="prayerGrid">
+        <article class="glass prayer-card" data-key="subuh"><div class="card-head"><h3>Subuh</h3></div><div class="card-time" id="time-subuh">--:--</div></article>
+        <article class="glass prayer-card muted" data-key="terbit"><div class="card-head"><h3>Terbit</h3><span class="tag">Matahari</span></div><div class="card-time" id="time-terbit">--:--</div></article>
+        <article class="glass prayer-card" data-key="dhuhur"><div class="card-head"><h3>Dhuhur</h3></div><div class="card-time" id="time-dhuhur">--:--</div></article>
+        <article class="glass prayer-card" data-key="ashar"><div class="card-head"><h3>Ashar</h3></div><div class="card-time" id="time-ashar">--:--</div></article>
+        <article class="glass prayer-card" data-key="maghrib"><div class="card-head"><h3>Maghrib</h3></div><div class="card-time" id="time-maghrib">--:--</div></article>
+        <article class="glass prayer-card" data-key="isya"><div class="card-head"><h3>Isya'</h3></div><div class="card-time" id="time-isya">--:--</div></article>
+      </div>
+
+      <p class="accuracy">Ralat waktu sholat &plusmn; 2 menit &middot; Dipersembahkan dengan standar presisi dama.id</p>
+    </section>
+
+    <section id="calendarView" class="view hidden">
+      <div class="glass controls">
+        <div class="controls-left">
+          <label class="sr-only" for="monthSelect">Bulan</label>
+          <select id="monthSelect"></select>
+          <label class="sr-only" for="yearSelect">Tahun</label>
+          <select id="yearSelect"></select>
+        </div>
+        <div class="controls-right">
+          <button id="printBtn" class="btn btn-dark" type="button">Cetak / PDF</button>
+          <button id="exportExcelBtn" class="btn btn-teal" type="button">Unduh Excel</button>
+        </div>
+      </div>
+
+      <div class="glass table-wrap">
+        <table class="schedule-table" id="scheduleTable">
+          <thead>
+            <tr>
+              <th>Hari</th><th>Tanggal</th><th>Subuh</th><th>Terbit</th><th>Dhuhur</th><th>Ashar</th><th>Maghrib</th><th>Isya'</th>
+            </tr>
+          </thead>
+          <tbody id="scheduleBody"></tbody>
+        </table>
+      </div>
+      <p class="accuracy print-only-note">Jadwal Sholat UP - <span id="printMeta"></span></p>
+    </section>
+  </main>
+
+  <div id="settingsModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close="modal"></div>
+    <div class="modal-dialog glass" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="modal-head">
+        <h2 id="settingsTitle">Pengaturan Sholat UP</h2>
+        <button id="closeSettings" class="icon-btn" type="button" aria-label="Tutup">&times;</button>
+      </div>
+
+      <fieldset class="field">
+        <legend>Parameter Ashar</legend>
+        <div class="option-grid">
+          <label class="option"><input type="radio" name="tba" value="1"><span>Imam Syafi'i (Default)</span></label>
+          <label class="option"><input type="radio" name="tba" value="2"><span>Imam Hanafi</span></label>
+        </div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Pilih Wilayah / Kota</legend>
+        <button id="gpsBtn" class="btn btn-gps" type="button">Deteksi GPS Otomatis</button>
+        <div id="cityOptions" class="option-grid"></div>
+      </fieldset>
+
+      <div class="modal-foot">
+        <button id="doneSettings" class="btn btn-teal" type="button">Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>

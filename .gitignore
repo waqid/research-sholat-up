@@ -1,6 +1,3 @@
-node_modules/
-dist/
-dist-ssr/
-coverage/
-.vitest/
-*.local
+.DS_Store
+Thumbs.db
+*.log
