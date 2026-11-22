@@ -102,7 +102,28 @@ button, select, input { font: inherit; }
 .active-dot::after { content: ""; position: absolute; inset: 0; border-radius: 50%; background: var(--flame); opacity: .75; animation: ping 1.5s cubic-bezier(0,0,.2,1) infinite; }
 @keyframes ping { 75%,100% { transform: scale(2.2); opacity: 0; } }
 
-.accuracy { text-align: center; font-size: .75rem; color: var(--muted); padding: 1rem 0; margin: 0; border-top: 1px solid rgba(148,163,184,.2); }
+.site-footer {
+  text-align: center;
+  padding: 1.25rem 0 .5rem;
+  margin-top: .25rem;
+  border-top: 1px solid rgba(148,163,184,.18);
+}
+.footer-note {
+  margin: 0;
+  font-size: .72rem;
+  color: var(--muted);
+  letter-spacing: .01em;
+}
+.footer-brand {
+  margin: .35rem 0 0;
+  font-size: .68rem;
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: rgba(82,82,91,.75);
+}
+.footer-brand span { color: var(--teal); }
+@media (prefers-color-scheme: dark) { .footer-brand { color: rgba(148,163,184,.75); } }
 
 .controls { padding: 1rem; margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; gap: .75rem; flex-wrap: wrap; }
 .controls-left, .controls-right { display: flex; gap: .5rem; align-items: center; flex-wrap: wrap; }
@@ -155,7 +176,7 @@ select {
 @media (prefers-color-scheme: dark) { .option { border-color: #475569; } }
 .modal-foot { display: flex; justify-content: flex-end; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-.print-only-note { display: none; }
+.print-only-note { display: none; text-align: center; font-size: .75rem; color: #555; padding: .5rem 0 0; margin: 0; }
 
 @media (max-width: 700px) {
   .prayer-grid { grid-template-columns: repeat(2, 1fr); }
@@ -174,7 +195,7 @@ select {
 
 @media print {
   body { background: #fff; color: #000; }
-  .topbar, .controls-right, .modal, .status-ramp, .accuracy:not(.print-only-note) { display: none !important; }
+  .topbar, .controls-right, .modal, .status-ramp, .site-footer { display: none !important; }
   .main { padding: 0; width: 100%; max-width: none; }
   .glass { box-shadow: none; border: 1px solid #ccc; background: #fff; backdrop-filter: none; }
   .hero { margin-bottom: 1rem; }
