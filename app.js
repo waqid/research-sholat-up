@@ -22,6 +22,7 @@
   const state = {
     location: loadLocation(),
     tba: loadTba(),
+    theme: loadTheme(),
     month: new Date().getMonth() + 1,
     year: new Date().getFullYear(),
     activeTab: 'today',
@@ -44,26 +45,69 @@
     cityOptions: $('cityOptions'),
     printMeta: $('printMeta'),
     todayView: $('todayView'),
-    calendarView: $('calendarView')
+    calendarView: $('calendarView'),
+    customLat: $('customLat'),
+    customLong: $('customLong'),
+    customTinggi: $('customTinggi'),
+    customZone: $('customZone'),
+    customName: $('customName')
   };
 
   function loadTba() {
     const v = Number(localStorage.getItem('sholat_tba'));
     return v === 2 ? 2 : 1;
   }
+  function loadTheme() {
+    const t = localStorage.getItem('sholat_theme');
+    return t === 'light' || t === 'dark' ? t : 'system';
+  }
   function loadLocation() {
     try {
       const raw = localStorage.getItem('sholat_location');
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed.lat === 'number' && typeof parsed.long === 'number') return parsed;
+        if (parsed && typeof parsed.lat === 'number' && typeof parsed.long === 'number') return normalizeLocation(parsed);
       }
     } catch (_) {}
     return { ...PRESET_CITIES[0] };
   }
+  function normalizeLocation(loc) {
+    const lat = Number(loc.lat);
+    const long = Number(loc.long);
+    const tinggi = Number(loc.tinggi);
+    const zone = Number(loc.zone);
+    return {
+      id: loc.id || (loc.isCustom ? 'custom' : loc.isGps ? 'gps' : ''),
+      name: String(loc.name || 'Lokasi Kustom'),
+      lat: isFinite(lat) ? lat : -7.54,
+      long: isFinite(long) ? long : 112.065,
+      tinggi: isFinite(tinggi) ? tinggi : 50,
+      zone: isFinite(zone) ? zone : Math.round(new Date().getTimezoneOffset() / -60),
+      isGps: !!loc.isGps,
+      isCustom: !!loc.isCustom
+    };
+  }
   function saveState() {
     localStorage.setItem('sholat_tba', String(state.tba));
     localStorage.setItem('sholat_location', JSON.stringify(state.location));
+    localStorage.setItem('sholat_theme', state.theme);
+  }
+  function applyTheme() {
+    const root = document.documentElement;
+    if (state.theme === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', state.theme);
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      const dark = state.theme === 'dark' || (state.theme === 'system' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      meta.setAttribute('content', dark ? '#0F172A' : '#282828');
+    }
+    const btn = $('themeToggle');
+    if (btn) {
+      const label = state.theme === 'system' ? 'Sistem' : state.theme === 'dark' ? 'Gelap' : 'Terang';
+      btn.textContent = label;
+      btn.setAttribute('aria-label', 'Tema: ' + label);
+      btn.title = 'Tema: ' + label;
+    }
   }
 
   /* --- Astronomy (Jean Meeus, ported from meeus.ts) --- */
@@ -267,7 +311,7 @@
       input.type = 'radio'; input.name = 'city'; input.value = city.id;
       input.checked = !state.location.isGps && state.location.name === city.name;
       input.addEventListener('change', () => {
-        state.location = { ...city, isGps: false };
+        state.location = normalizeLocation({ ...city, isGps: false, isCustom: false });
         saveState(); clearStatus(); renderBadges(); renderToday(); renderCalendar(); syncSettingsUI(); closeSettings();
       });
       const span = document.createElement('span');
@@ -281,11 +325,31 @@
     document.querySelectorAll('input[name="tba"]').forEach(r => { r.checked = Number(r.value) === state.tba; });
     document.querySelectorAll('input[name="city"]').forEach(r => {
       const city = PRESET_CITIES.find(c => c.id === r.value);
-      r.checked = !!city && !state.location.isGps && city.name === state.location.name;
+      r.checked = !!city && !state.location.isGps && !state.location.isCustom && city.name === state.location.name;
     });
     const gpsBtn = $('gpsBtn');
     gpsBtn.classList.toggle('active', !!state.location.isGps);
     gpsBtn.textContent = state.location.isGps ? 'GPS Aktif (Terdeteksi)' : 'Deteksi GPS Otomatis';
+    if (els.customLat) els.customLat.value = state.location.lat ?? '';
+    if (els.customLong) els.customLong.value = state.location.long ?? '';
+    if (els.customTinggi) els.customTinggi.value = state.location.tinggi ?? 50;
+    if (els.customZone) els.customZone.value = state.location.zone ?? Math.round(new Date().getTimezoneOffset() / -60);
+    if (els.customName) els.customName.value = state.location.isCustom ? (state.location.name || '') : '';
+  }
+
+  function applyCustomCoordinates() {
+    const lat = Number(els.customLat.value);
+    const long = Number(els.customLong.value);
+    const tinggi = Number(els.customTinggi.value);
+    const zoneRaw = els.customZone.value;
+    const zone = zoneRaw === '' ? Math.round(new Date().getTimezoneOffset() / -60) : Number(zoneRaw);
+    const name = (els.customName.value || '').trim() || 'Koordinat Kustom';
+    if (!isFinite(lat) || lat < -90 || lat > 90) { showStatus('Latitude harus antara -90 dan 90.', false); return; }
+    if (!isFinite(long) || long < -180 || long > 180) { showStatus('Longitude harus antara -180 dan 180.', false); return; }
+    if (!isFinite(tinggi) || tinggi < -500 || tinggi > 10000) { showStatus('Elevasi tidak valid.', false); return; }
+    if (!isFinite(zone) || zone < -12 || zone > 14) { showStatus('Zona waktu harus antara -12 dan 14.', false); return; }
+    state.location = normalizeLocation({ name, lat, long, tinggi, zone, isCustom: true, isGps: false });
+    saveState(); clearStatus(); renderBadges(); renderToday(); renderCalendar(); syncSettingsUI(); closeSettings();
   }
 
   function openSettings() { syncSettingsUI(); els.settingsModal.classList.remove('hidden'); els.settingsModal.setAttribute('aria-hidden','false'); }
@@ -295,14 +359,15 @@
     if (!navigator.geolocation) { showStatus('Geolocation tidak didukung di browser ini.', false); return; }
     showStatus('Mendeteksi lokasi GPS...', false);
     navigator.geolocation.getCurrentPosition((pos) => {
-      state.location = {
+      state.location = normalizeLocation({
         name: 'Lokasi GPS (Otomatis)',
         tinggi: pos.coords.altitude || 50,
         lat: pos.coords.latitude,
         long: pos.coords.longitude,
         zone: Math.round(new Date().getTimezoneOffset() / -60),
-        isGps: true
-      };
+        isGps: true,
+        isCustom: false
+      });
       saveState(); clearStatus(); renderBadges(); renderToday(); renderCalendar(); syncSettingsUI(); closeSettings();
     }, () => {
       showStatus('Gagal mendeteksi GPS. Menggunakan lokasi default/pilihan terakhir.', true);
@@ -356,6 +421,16 @@
     els.settingsModal.addEventListener('click', (e) => { if (e.target && e.target.dataset.close === 'modal') closeSettings(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSettings(); });
     $('gpsBtn').addEventListener('click', requestGps);
+    $('applyCustomBtn').addEventListener('click', applyCustomCoordinates);
+    $('themeToggle').addEventListener('click', () => {
+      state.theme = state.theme === 'system' ? 'light' : state.theme === 'light' ? 'dark' : 'system';
+      saveState(); applyTheme();
+    });
+    if (window.matchMedia) {
+      const mq = window.matchMedia('(prefers-color-scheme: dark)');
+      const onChange = () => { if (state.theme === 'system') applyTheme(); };
+      if (mq.addEventListener) mq.addEventListener('change', onChange); else if (mq.addListener) mq.addListener(onChange);
+    }
     document.querySelectorAll('input[name="tba"]').forEach(r => r.addEventListener('change', (e) => {
       state.tba = Number(e.target.value); saveState(); renderBadges(); renderToday(); renderCalendar(); syncSettingsUI();
     }));
@@ -364,6 +439,7 @@
   }
 
   function init() {
+    applyTheme();
     initControls();
     buildCityOptions();
     bindEvents();

@@ -3,12 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#282828">
+  <meta name="theme-color" content="#11212D">
   <title>Sholat UP - Jadwal Sholat Presisi</title>
   <link rel="icon" type="image/png" href="icon.png">
+  <script>
+    try { const t = localStorage.getItem('sholat_theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch {}
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,10 +25,13 @@
           <span id="badgeTba" class="badge-teal">Asar: Syafi'i</span>
         </button>
       </div>
-      <nav class="tabs" aria-label="Navigasi">
-        <button class="tab active" data-tab="today" type="button">Hari Ini</button>
-        <button class="tab" data-tab="calendar" type="button">Kalender</button>
-      </nav>
+      <div class="topbar-actions">
+        <nav class="tabs" aria-label="Navigasi">
+          <button class="tab active" data-tab="today" type="button">Hari Ini</button>
+          <button class="tab" data-tab="calendar" type="button">Kalender</button>
+        </nav>
+        <button id="themeToggle" class="theme-toggle" type="button" aria-label="Tema: Sistem" title="Tema: Sistem">Sistem</button>
+      </div>
     </div>
   </header>
 
@@ -50,7 +56,6 @@
 
       <footer class="site-footer">
         <p class="footer-note">Ralat waktu sholat &plusmn; 2 menit</p>
-        <p class="footer-brand">Standar presisi <span>dama.id</span></p>
       </footer>
     </section>
 
@@ -102,6 +107,21 @@
         <legend>Pilih Wilayah / Kota</legend>
         <button id="gpsBtn" class="btn btn-gps" type="button">Deteksi GPS Otomatis</button>
         <div id="cityOptions" class="option-grid"></div>
+      </fieldset>
+
+      <fieldset class="field">
+        <legend>Koordinat Kustom</legend>
+        <p class="field-help">Gunakan koordinat manual jika kota tidak ada di preset. Lokasi ini tetap tersimpan dan dipakai di Hari Ini dan Kalender.</p>
+        <div class="custom-grid">
+          <label class="input-field"><span>Nama Lokasi</span><input id="customName" type="text" placeholder="Contoh: Rumah"></label>
+          <label class="input-field"><span>Lintang (Latitude)</span><input id="customLat" type="number" step="any" placeholder="-7.54"></label>
+          <label class="input-field"><span>Bujur (Longitude)</span><input id="customLong" type="number" step="any" placeholder="112.065"></label>
+          <label class="input-field"><span>Elevasi (m)</span><input id="customTinggi" type="number" step="any" placeholder="50"></label>
+          <label class="input-field"><span>Zona Waktu (UTC)</span><input id="customZone" type="number" step="1" placeholder="7"></label>
+        </div>
+        <div class="custom-actions">
+          <button id="applyCustomBtn" class="btn btn-teal" type="button">Gunakan Koordinat</button>
+        </div>
       </fieldset>
 
       <div class="modal-foot">
